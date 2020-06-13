@@ -34,10 +34,12 @@ public class AutoEllipsisTexView extends View {
     private String text;
     private int textColor;
     private int textSize;
+    private String ellipsis;
 
     private TextPaint textPaint;
     private Rect lineTextRect;
     private int maxLineWidth, maxLineHeight;
+    private boolean isOverflow;
 
     /**
      * lineTextList: 每行文字的集合
@@ -68,8 +70,13 @@ public class AutoEllipsisTexView extends View {
         text = typedArray.getString(R.styleable.AutoEllipsisTexView_text);
         textColor = typedArray.getColor(R.styleable.AutoEllipsisTexView_textColor, Color.parseColor("#333333"));
         textSize = typedArray.getDimensionPixelSize(R.styleable.AutoEllipsisTexView_textSize, 50);
+        ellipsis = typedArray.getString(R.styleable.AutoEllipsisTexView_ellipsis);
 
         typedArray.recycle();
+
+        if (ellipsis == null) {
+            ellipsis = "...";
+        }
     }
 
     private void initPaint() {
@@ -103,12 +110,13 @@ public class AutoEllipsisTexView extends View {
         char[] textCharArray = text.toCharArray();
         lineTextList.clear();
         lineRectList.clear();
+        isOverflow = Boolean.FALSE;
         int currentTextWidth = 0;
         StringBuilder lineStringBuilder = new StringBuilder();
         int totalHeight = 0;
         for (int i = 0, length = textCharArray.length; i < length; i++) {
             char textChar = textCharArray[i];
-            currentTextWidth += CharUtils.getSingleCharWidth(textPaint, textChar);
+            currentTextWidth += StringUtils.getSingleCharWidth(textPaint, textChar);
             if (currentTextWidth > maxLineWidth) {
                 // 当行宽度大于该控件宽度时，进行行文本以及Rect保存
 
@@ -139,12 +147,20 @@ public class AutoEllipsisTexView extends View {
                         lineRectList.add(lineTextRect);
                     }
                     // 当总高度大于控件高度时，结束循环
+                    isOverflow = Boolean.TRUE;
                     break;
                 }
             } else {
                 // 当行宽度小于控件宽度时，继续添加进该行
                 lineStringBuilder.append(textChar);
             }
+        }
+
+        if (isOverflow && !lineTextList.isEmpty()) {
+            // 进行末尾插入文本
+            int lastIndex = lineTextList.size() - 1;
+            lineTextList.set(lastIndex, StringUtils.forcedTextToEnd(lineTextList.get(lastIndex), ellipsis, maxLineWidth, textPaint));
+            textPaint.getTextBounds(lineTextList.get(lastIndex), 0, lineTextList.get(lastIndex).length(), lineRectList.get(lastIndex));
         }
     }
 

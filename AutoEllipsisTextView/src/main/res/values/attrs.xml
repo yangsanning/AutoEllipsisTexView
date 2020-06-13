@@ -13,5 +13,7 @@
         <attr name="textColor" format="color" />
         <!--字体大小-->
         <attr name="textSize" format="dimension" />
+
+        <attr name="ellipsis" format="string" />
     </declare-styleable>
 </resources>
