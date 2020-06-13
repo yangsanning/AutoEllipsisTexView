@@ -44,7 +44,7 @@
         android:layout_height="93dp"
         android:background="@android:color/white"
         ysn:padding="10dp"
-        ysn:rowWidth="7dp"
+        ysn:rowWidth="5dp"
         ysn:text="@string/songqian"
         ysn:textColor="#333333"
         ysn:textSize="18sp" />

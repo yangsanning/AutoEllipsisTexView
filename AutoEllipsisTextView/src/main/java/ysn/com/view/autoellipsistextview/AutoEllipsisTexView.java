@@ -65,11 +65,11 @@ public class AutoEllipsisTexView extends View {
     private void initAttrs(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.AutoEllipsisTexView);
 
-        padding = typedArray.getDimensionPixelSize(R.styleable.AutoEllipsisTexView_padding, 7);
-        rowWidth = typedArray.getDimensionPixelSize(R.styleable.AutoEllipsisTexView_padding, 7);
+        padding = typedArray.getDimensionPixelSize(R.styleable.AutoEllipsisTexView_padding, 30);
+        rowWidth = typedArray.getDimensionPixelSize(R.styleable.AutoEllipsisTexView_rowWidth, 15);
         text = typedArray.getString(R.styleable.AutoEllipsisTexView_text);
         textColor = typedArray.getColor(R.styleable.AutoEllipsisTexView_textColor, Color.parseColor("#333333"));
-        textSize = typedArray.getDimensionPixelSize(R.styleable.AutoEllipsisTexView_textSize, 50);
+        textSize = typedArray.getDimensionPixelSize(R.styleable.AutoEllipsisTexView_textSize, 56);
         ellipsis = typedArray.getString(R.styleable.AutoEllipsisTexView_ellipsis);
 
         typedArray.recycle();
