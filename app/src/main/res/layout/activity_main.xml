@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/line_bg_white_bottom"
         android:padding="10dp"
-        android:text="下面 TextView 展示: "
+        android:text="TextView 展示: "
         android:textColor="#333333"
         android:textSize="18sp" />
 
@@ -35,7 +35,7 @@
         android:layout_marginTop="20dp"
         android:background="@drawable/line_bg_white_bottom"
         android:padding="10dp"
-        android:text="下面 AutoEllipsisTexView 展示: "
+        android:text="AutoEllipsisTexView 展示: "
         android:textColor="#333333"
         android:textSize="18sp" />
 

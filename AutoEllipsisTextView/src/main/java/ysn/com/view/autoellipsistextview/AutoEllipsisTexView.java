@@ -35,10 +35,12 @@ public class AutoEllipsisTexView extends View {
     private int textColor;
     private int textSize;
     private String ellipsis;
+    private Gravity gravity;
 
     private TextPaint textPaint;
     private Rect lineTextRect;
     private int maxLineWidth, maxLineHeight;
+    private int totalHeight;
     private boolean isOverflow;
 
     /**
@@ -71,6 +73,7 @@ public class AutoEllipsisTexView extends View {
         textColor = typedArray.getColor(R.styleable.AutoEllipsisTexView_textColor, Color.parseColor("#333333"));
         textSize = typedArray.getDimensionPixelSize(R.styleable.AutoEllipsisTexView_textSize, 56);
         ellipsis = typedArray.getString(R.styleable.AutoEllipsisTexView_ellipsis);
+        gravity = Gravity.getValue(typedArray.getInt(R.styleable.AutoEllipsisTexView_gravity, Gravity.CENTER_VERTICAL.mode));
 
         typedArray.recycle();
 
@@ -110,10 +113,11 @@ public class AutoEllipsisTexView extends View {
         char[] textCharArray = text.toCharArray();
         lineTextList.clear();
         lineRectList.clear();
+        totalHeight = 0;
         isOverflow = Boolean.FALSE;
+
         int currentTextWidth = 0;
         StringBuilder lineStringBuilder = new StringBuilder();
-        int totalHeight = 0;
         for (int i = 0, length = textCharArray.length; i < length; i++) {
             char textChar = textCharArray[i];
             currentTextWidth += StringUtils.getSingleCharWidth(textPaint, textChar);
@@ -122,16 +126,9 @@ public class AutoEllipsisTexView extends View {
 
                 String lineText = lineStringBuilder.toString();
                 textPaint.getTextBounds(lineText, 0, lineText.length(), lineTextRect);
+                if ((totalHeight + (lineTextRect.height() + rowWidth)) < maxLineHeight) {
+                    totalHeight += lineTextRect.height() + rowWidth;
 
-                if (i == length - 1) {
-                    // 是最后一行，不进行行高添加
-                    totalHeight += lineTextRect.height();
-                } else {
-                    // 不是最后一行，进行行高添加
-                    totalHeight += (lineTextRect.height() + rowWidth);
-                }
-
-                if (totalHeight < maxLineHeight) {
                     // 当总高度小于控件高度时，进行保存
                     lineTextList.add(lineText);
                     lineRectList.add(lineTextRect);
@@ -141,8 +138,9 @@ public class AutoEllipsisTexView extends View {
                     // 因这个字符未添加，故进行回退
                     i--;
                 } else {
-                    if ((totalHeight - rowWidth) < maxLineHeight) {
-                        // 最后一行如果还能放进文本, 则进行保存
+                    if ((totalHeight + lineTextRect.height()) < maxLineHeight) {
+                        totalHeight += lineTextRect.height();
+                        // 最后一行去除行高如果还能放进文本, 则进行保存
                         lineTextList.add(lineText);
                         lineRectList.add(lineTextRect);
                     }
@@ -173,6 +171,10 @@ public class AutoEllipsisTexView extends View {
         }
 
         int marginTop = padding;
+        if (isOverflow && gravity == Gravity.CENTER_VERTICAL) {
+            marginTop += (maxLineHeight - totalHeight) / 2;
+        }
+
         // 绘制第一行
         marginTop += lineRectList.get(0).height();
         canvas.drawText(lineTextList.get(0), padding, marginTop, textPaint);
