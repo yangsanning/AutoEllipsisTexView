@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion rootProject.ext.version.compileSdkVersion
@@ -9,9 +9,8 @@ android {
         versionCode rootProject.ext.version.versionCode
         versionName rootProject.ext.version.versionName
 
-        applicationId "ysn.com.demo.autoellipsistexview"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -26,10 +25,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     api rootProject.ext.baseLibs
 
-    implementation project(':AutoEllipsisTextView')
-
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
 }
