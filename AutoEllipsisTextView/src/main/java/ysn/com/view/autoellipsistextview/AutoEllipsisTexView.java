@@ -144,13 +144,28 @@ public class AutoEllipsisTexView extends View {
                         lineTextList.add(lineText);
                         lineRectList.add(lineTextRect);
                     }
-                    // 当总高度大于控件高度时，结束循环
+                    // 当总高度大于控件高度时，溢出，结束循环
                     isOverflow = Boolean.TRUE;
                     break;
                 }
             } else {
                 // 当行宽度小于控件宽度时，继续添加进该行
                 lineStringBuilder.append(textChar);
+
+                // 如果是最后一行，进行判断添加
+                if (i == length - 1) {
+                    String lineText = lineStringBuilder.toString();
+                    textPaint.getTextBounds(lineText, 0, lineText.length(), lineTextRect);
+                    // 当总高度小于控件高度时，则进行添加
+                    if ((totalHeight + lineTextRect.height()) < maxLineHeight) {
+                        totalHeight += lineTextRect.height();
+                        lineTextList.add(lineText);
+                        lineRectList.add(lineTextRect);
+                    } else {
+                        // 当总高度大于控件高度时，溢出
+                        isOverflow = Boolean.TRUE;
+                    }
+                }
             }
         }
 
