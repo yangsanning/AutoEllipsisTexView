@@ -38,7 +38,6 @@ public class AutoEllipsisTexView extends View {
     private Gravity gravity;
 
     private TextPaint textPaint;
-    private Rect lineTextRect;
     private int maxLineWidth, maxLineHeight;
     private int totalHeight;
     private boolean isOverflow;
@@ -88,8 +87,6 @@ public class AutoEllipsisTexView extends View {
         textPaint.setTextSize(textSize);
         textPaint.setAntiAlias(true);
         textPaint.setTextAlign(Paint.Align.LEFT);
-
-        lineTextRect = new Rect();
     }
 
     @Override
@@ -125,6 +122,7 @@ public class AutoEllipsisTexView extends View {
                 // 当行宽度大于该控件宽度时，进行行文本以及Rect保存
 
                 String lineText = lineStringBuilder.toString();
+                Rect lineTextRect = new Rect();
                 textPaint.getTextBounds(lineText, 0, lineText.length(), lineTextRect);
                 if ((totalHeight + (lineTextRect.height() + rowWidth)) < maxLineHeight) {
                     totalHeight += lineTextRect.height() + rowWidth;
@@ -155,6 +153,7 @@ public class AutoEllipsisTexView extends View {
                 // 如果是最后一行，进行判断添加
                 if (i == length - 1) {
                     String lineText = lineStringBuilder.toString();
+                    Rect lineTextRect = new Rect();
                     textPaint.getTextBounds(lineText, 0, lineText.length(), lineTextRect);
                     // 当总高度小于控件高度时，则进行添加
                     if ((totalHeight + lineTextRect.height()) < maxLineHeight) {
